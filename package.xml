@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>handover</name>
+  <version>0.0.0</version>
+  <description>The handover package</description>
+
+  <maintainer email="markus.j.leitner@tuwien.ac.at">Markus Leitner</maintainer>
+
+  <license>BSD</license>
+  
+  <depend>actionlib</depend>
+  <depend>actionlib_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>hsrb_interface_py</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tmc_manipulation_msgs</depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>
