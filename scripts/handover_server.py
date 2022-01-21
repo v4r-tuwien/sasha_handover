@@ -1,19 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2016 Toyota Motor Corporation
 
 import math
 import os
 import sys
-import actionlib
 
-from std_srvs.srv import Empty
-from hsrb_interface import Robot
-from geometry_msgs.msg import WrenchStamped
-from tmc_manipulation_msgs.srv import SafeJointChange, SafeJointChangeRequest
-from sensor_msgs.msg import JointState
-from handover.msg import HandoverAction
+import actionlib
 import rospy
+from geometry_msgs.msg import WrenchStamped
+from hsrb_interface import Robot
+from sensor_msgs.msg import JointState
+from std_srvs.srv import Empty
+from tmc_manipulation_msgs.srv import SafeJointChange, SafeJointChangeRequest
+
+from handover.msg import HandoverAction
 
 
 class HandoverServer(object):

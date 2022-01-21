@@ -1,5 +1,6 @@
 # Sasha handover
-Action server for grasped object handover. 
+Action server for grasped object handover.
+ 
 Handover topic is ```/handover```
 
 ``` 
