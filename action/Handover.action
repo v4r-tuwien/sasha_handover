@@ -1,5 +1,6 @@
 # Define the goal
 float32 force_thresh
+string object_name
 ---
 # Define the result
 ---

@@ -58,7 +58,7 @@ class HandoverServer(object):
         if goal.force_thresh > 0:
             self.force_thresh = goal.force_thresh
         self.readjust_offset()
-        self.move_to_handover_position()
+        self.move_to_handover_position(goal.object_name)
         while not self.finished:
             rospy.rostime.wallsleep(0.5)
 
@@ -70,7 +70,7 @@ class HandoverServer(object):
     def get_current_force(self):
         return [self._force_data_x, self._force_data_y, self._force_data_z]
     
-    def move_to_handover_position(self):
+    def move_to_handover_position(self, object_name):
         self.whole_body.move_to_neutral()
         joint_goal = JointState()
         joint_goal.name.extend(['arm_flex_joint', 'arm_lift_joint', 'wrist_flex_joint', 
@@ -79,7 +79,10 @@ class HandoverServer(object):
                                     0, 0, 0, 0])
         req = SafeJointChangeRequest(joint_goal)
         res = self.joint_control(req)        
-        self.tts.say(u'You can take the object now.')
+        if len(object_name) > 0:
+            self.tts.say(f"You can take the {object_name} now.")
+        else:
+            self.tts.say('You can take the object now.')
         rospy.loginfo('You can take the object now.')
         self.position_reached = res.success
 
