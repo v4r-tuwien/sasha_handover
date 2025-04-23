@@ -44,6 +44,11 @@ class HandoverServer(object):
         ft_sensor_topic = '/hsrb/wrist_wrench/compensated'
         self._wrist_wrench_sub = rospy.Subscriber(
             ft_sensor_topic, WrenchStamped, self.__ft_sensor_cb)
+        
+        if rospy.has_param('/handover/use_fancy_handover'):
+            self.use_fancy_handover = rospy.get_param('/handover/use_fancy_handover')
+        else:
+            self.use_fancy_handover = True
 
         # Wait for connection
         try:
@@ -71,20 +76,36 @@ class HandoverServer(object):
         return [self._force_data_x, self._force_data_y, self._force_data_z]
     
     def move_to_handover_position(self, object_name):
-        self.whole_body.move_to_neutral()
-        joint_goal = JointState()
-        joint_goal.name.extend(['arm_flex_joint', 'arm_lift_joint', 'wrist_flex_joint', 
-                                'arm_roll_joint', 'wrist_roll_joint', 'head_pan_joint', 'head_tilt_joint'])
-        joint_goal.position.extend([-0.3, 0.4, -1, 
-                                    0, 0, 0, 0])
-        req = SafeJointChangeRequest(joint_goal)
-        res = self.joint_control(req)        
+
+        if self.use_fancy_handover:
+            self.whole_body.move_to_neutral()
+            joint_goal = JointState()
+            joint_goal.name.extend(['arm_flex_joint', 'arm_lift_joint', 'wrist_flex_joint', 
+                                    'arm_roll_joint', 'wrist_roll_joint', 'head_pan_joint', 'head_tilt_joint'])
+            joint_goal.position.extend([-0.3, 0.4, -1, 
+                                        0, 0, 0, 0])
+            req = SafeJointChangeRequest(joint_goal)
+            res = self.joint_control(req) 
+            self.position_reached = res.success
+            
         if len(object_name) > 0:
+
+            try:
+                if "obj_" in object_name:
+                    # Getting real object name from the params
+                    dataset = rospy.get_param('/grasping_pipeline/dataset')
+                    object_name = rospy.get_param(f'/object_mapping/{dataset}/{object_name}')
+            except:
+                rospy.loginfo("Object name not found in the params. Using the object name as it is.")
+
+            if object_name[0].isdigit():
+                object_name = object_name.split("_", 1)[-1]
+            self.position_reached = True
             self.tts.say(f"You can take the {object_name} now.")
         else:
             self.tts.say('You can take the object now.')
         rospy.loginfo('You can take the object now.')
-        self.position_reached = res.success
+   
 
     def reset_offset(self):
         self.readjust_offset()
