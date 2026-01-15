@@ -14,7 +14,7 @@ from sensor_msgs.msg import JointState
 from std_srvs.srv import Empty
 from tmc_manipulation_msgs.srv import SafeJointChange, SafeJointChangeRequest
 
-from handover.msg import HandoverAction
+from grasping_pipeline_msgs.msg import HandoverAction
 
 
 class HandoverServer(object):
