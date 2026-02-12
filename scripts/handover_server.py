@@ -25,7 +25,7 @@ class HandoverServer(object):
         self._force_data_y = 0.0
         self._force_data_z = 0.0
 
-        self.force_thresh = 0.2
+        self.force_thresh = 0.5
         self.position_reached = False
         self.finished = False
 
