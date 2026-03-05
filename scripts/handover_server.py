@@ -62,6 +62,9 @@ class HandoverServer(object):
 
         if goal.force_thresh > 0:
             self.force_thresh = goal.force_thresh
+        else:
+            self.force_thresh = rospy.get_param('/handover/force_thresh', 1.0)
+
         self.readjust_offset()
         self.move_to_handover_position(goal.object_name)
         while not self.finished:
